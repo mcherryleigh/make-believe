@@ -1,0 +1,9 @@
+# Node/NPM
+node_modules
+
+# Project
+.nyc_output
+
+# Jetbrains IDE
+.idea
+*.iml
