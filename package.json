@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "ci:sendCoverage": "nyc report --reporter=text-lcov | coveralls",
-    "eslint": "eslint ./src ./test",
+    "lint": "eslint ./src ./test",
     "test": "nyc ava",
     "semantic-release": "semantic-release",
     "se": "semantic-release-cli setup"
