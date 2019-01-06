@@ -23,6 +23,7 @@
   "private": false,
   "scripts": {
     "ci:sendCoverage": "nyc report --reporter=text-lcov | coveralls",
+    "docs-build": "documentation build src -o docs -f html",
     "lint": "eslint ./ ./test",
     "lint-fix": "eslint ./src ./test --fix",
     "test": "nyc ava",

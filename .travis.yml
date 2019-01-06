@@ -19,8 +19,20 @@ jobs:
         - npm run ci:sendCoverage
       before_script: greenkeeper-lockfile-update
       after_script: greenkeeper-lockfile-upload
-    - stage: deploy
+    - stage: deploy npm and github release
       if: branch = master
       script:
         - "npm install -g travis-deploy-once"
         - travis-deploy-once --pro "npm run semantic-release"
+    - stage: deploy docs to github pages
+      if: branch = master
+      language: node_js
+      node_js:
+        - "10"
+      script: npm run docs-build
+      deploy:
+        local-dir: docs
+        provider: pages
+        skip-cleanup: true
+        github-token: $GH_TOKEN
+        keep-history: true
