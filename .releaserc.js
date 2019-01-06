@@ -27,13 +27,12 @@ const parserOpts = {
 module.exports = {
   branch: "master",
   tagFormat:"${version}",
+  preset: 'angular',
   analyzeCommits: {
-    preset: 'eslint',
     releaseRules: releaseRules, // optional, only if you want to set up new/modified release rules inside another file
     parserOpts: parserOpts,
   },
   generateNotes: {
-    preset: 'eslint',
     parserOpts: parserOpts,
   },
 };
