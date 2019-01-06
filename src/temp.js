@@ -1,3 +1,3 @@
-exports.truly = function () {
-  return true
+exports.truly = function truly() {
+  return true;
 };
