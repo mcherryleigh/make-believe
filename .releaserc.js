@@ -22,12 +22,18 @@ const parserOpts = {
     `scope`,
     `subject`
   ],
-}
+};
 
 module.exports = {
   branch: "master",
   tagFormat:"${version}",
   preset: 'angular',
+  plugins: [
+    ["@semantic-release/git", {
+      "assets": ["./**/*.{js}", "docs", "package.json"],
+      "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+    }]
+  ],
   analyzeCommits: {
     releaseRules: releaseRules, // optional, only if you want to set up new/modified release rules inside another file
     parserOpts: parserOpts,
