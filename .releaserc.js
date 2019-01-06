@@ -16,11 +16,11 @@ const releaseRules = [
 ];
 
 const parserOpts = {
-  headerPattern: /^(?::([\w-]*):)?\s*(\w*):\s*(.*)$/,
+  headerPattern: /^(\w*)(?:\((.*)\))?: (.*)$/,
   headerCorrespondence: [
-    'emoji',
-    'tag',
-    'message',
+    `type`,
+    `scope`,
+    `subject`
   ],
 }
 
