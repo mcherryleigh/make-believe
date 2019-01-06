@@ -1,6 +1,8 @@
-var releaseRules = [
+/* eslint-disable no-useless-escape */
+
+const releaseRules = [
   //patch
-  {type: 'chore': release: 'patch'},
+  {type: 'chore', release: 'patch'},
   {type: 'docs', release: 'patch'},
   {type: 'fix', release: 'patch'},
   {type: 'test', release: 'patch'},
@@ -9,10 +11,10 @@ var releaseRules = [
   {type: 'perf', release: 'minor'},
   {type: 'refactor', release: 'minor'},
   //major
-  {tag: 'breaking', release: 'major'}
+  {tag: 'breaking', release: 'major'},
+  {tag: 'major', release: 'major'}
 ];
 
-/* eslint-disable no-useless-escape */
 module.exports = {
   branch: "master",
   tagFormat:"${version}",
