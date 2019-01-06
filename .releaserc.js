@@ -29,16 +29,16 @@ module.exports = {
   tagFormat:"${version}",
   preset: 'angular',
   plugins: [
+    ["@semantic-release/commit-analyzer",{
+      releaseRules: releaseRules, // optional, only if you want to set up new/modified release rules inside another file
+      parserOpts: parserOpts,
+    }],
+    ["@semantic-release/release-notes-generator",{
+      parserOpts: parserOpts,
+    }],
     ["@semantic-release/git", {
-      "assets": ["./**/*.{js}", "docs", "package.json"],
-      "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      assets: ["./**/*.{js}", "docs", "package.json"],
+      message: "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
     }]
   ],
-  analyzeCommits: {
-    releaseRules: releaseRules, // optional, only if you want to set up new/modified release rules inside another file
-    parserOpts: parserOpts,
-  },
-  generateNotes: {
-    parserOpts: parserOpts,
-  },
 };
