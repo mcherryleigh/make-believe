@@ -20,4 +20,6 @@ jobs:
       after_script: greenkeeper-lockfile-upload
     - stage: deploy
       if: branch = master
-      script: travis-deploy-once "npm run semantic-release"
+      script:
+        - "npm install -g travis-deploy-once"
+        - travis-deploy-once "npm run semantic-release"
