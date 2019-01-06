@@ -3,7 +3,7 @@ module.exports = {
   analyzeCommits: {
     preset: 'eslint',
     releaseRules: './config/release-rules.js', // optional, only if you want to set up new/modified release rules inside another file
-    parserOpts: { // optional, only you want to have emoji commit support
+    parserOpts: {
       headerPattern: /^(?::([\w-]*):)?\s*(\w*):\s*(.*)$/,
       headerCorrespondence: [
         'emoji',
@@ -14,7 +14,7 @@ module.exports = {
   },
   generateNotes: {
     preset: 'eslint',
-    parserOpts: { // optional, only you want to have emoji commit support
+    parserOpts: {
       headerPattern: /^(?::([\w-]*):)?\s*(\w*):\s*(.*)$/,
       headerCorrespondence: [
         'emoji',

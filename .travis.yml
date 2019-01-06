@@ -16,6 +16,7 @@ jobs:
       script:
         - npm run lint
         - npm run test
+        - npm run ci:sendCoverage
       before_script: greenkeeper-lockfile-update
       after_script: greenkeeper-lockfile-upload
     - stage: deploy
