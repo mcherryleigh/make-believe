@@ -15,30 +15,25 @@ const releaseRules = [
   {tag: 'major', release: 'major'}
 ];
 
+const parserOpts = {
+  headerPattern: /^(?::([\w-]*):)?\s*(\w*):\s*(.*)$/,
+  headerCorrespondence: [
+    'emoji',
+    'tag',
+    'message',
+  ],
+}
+
 module.exports = {
   branch: "master",
   tagFormat:"${version}",
   analyzeCommits: {
     preset: 'eslint',
     releaseRules: releaseRules, // optional, only if you want to set up new/modified release rules inside another file
-    parserOpts: {
-      headerPattern: /^(?::([\w-]*):)?\s*(\w*):\s*(.*)$/,
-      headerCorrespondence: [
-        'emoji',
-        'tag',
-        'message',
-      ],
-    },
+    parserOpts: parserOpts,
   },
   generateNotes: {
     preset: 'eslint',
-    parserOpts: {
-      headerPattern: /^(?::([\w-]*):)?\s*(\w*):\s*(.*)$/,
-      headerCorrespondence: [
-        'emoji',
-        'tag',
-        'message',
-      ],
-    },
+    parserOpts: parserOpts,
   },
 };
