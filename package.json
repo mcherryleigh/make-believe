@@ -1,7 +1,7 @@
 {
   "name": "make-believe",
   "version": "0.0.0-development",
-  "private": true,
+  "private": false,
   "scripts": {
     "ci:sendCoverage": "nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint ./src ./test",
