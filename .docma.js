@@ -43,6 +43,7 @@ const config = {
   src: [
     './src/**/*.js',
     './LICENSE:md',
+    './CODE_OF_CONDUCT.md',
     './README.md',
     './docs/*.md'
   ],
