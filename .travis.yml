@@ -31,7 +31,7 @@ jobs:
         - "10"
       script: npm run docs-build
       deploy:
-        local-dir: docs
+        local-dir: site_output
         provider: pages
         skip-cleanup: true
         github-token: $GH_TOKEN
