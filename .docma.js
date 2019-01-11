@@ -34,7 +34,7 @@ const config = {
   app: {
     title: 'Make-Believe',
     meta: null,
-    base: '/',
+    base: '/make-believe',
     entrance: 'content:readme', // use "api:your-lib" to set the entrance to a JSAPI page
     routing: 'path',
     server: 'github',

@@ -11,8 +11,8 @@ const releaseRules = [
   {type: 'perf', release: 'minor'},
   {type: 'refactor', release: 'minor'},
   //major
-  {tag: 'breaking', release: 'major'},
-  {tag: 'major', release: 'major'}
+  {type: 'breaking', release: 'major'},
+  {type: 'major', release: 'major'}
 ];
 
 const parserOpts = {
