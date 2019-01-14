@@ -26,7 +26,7 @@
     "docs": "npm run docs-build && npm run docs-serve --path=site_output",
     "docs-build": "node .docma.js > docma.json && node_modules/.bin/docma",
     "docs-serve": "node_modules/.bin/docma serve",
-    "lint": "eslint ./ ./test",
+    "lint": "eslint ./src ./test",
     "lint-fix": "eslint ./src ./test --fix",
     "test": "nyc ava",
     "semantic-release": "semantic-release",
