@@ -13,7 +13,7 @@ const config = {
     undescribed: false,
     ignored: false,
     hierarchy: true,
-    sort: 'alphabetic',
+    sort: 'grouped',
     relativePath: null,
     filter: null,
     allowUnknownTags: true,
