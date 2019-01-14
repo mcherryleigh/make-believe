@@ -1,8 +1,2 @@
-/**
- * truly returns true
- * @return {boolean}
- */
-
-exports.truly = function truly() {
-  return true;
-};
+exports.RandomValue = require('./RandomValue');
+exports.Entity = require('./Entity');
