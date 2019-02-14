@@ -1,111 +1,99 @@
-/* eslint-disable no-underscore-dangle */
+/* eslint no-underscore_dangle: 0 */
 
 /**
- * @class RandomValue
- * Class used to generate predictably random series of values.
+ * Create a RandomValue generator. Use the OptionsObject
+ * to override default behavior.
+ * @param {OptionsObject} [options] - An options object to set the seed and
  */
 class RandomValue {
-  /**
-   * @typedef {Object} PluginObject
-   * @property {String} PluginObject.name - The name of your function. This will be used as the
-   * method name unless an altName is also provided.
-   * @property {String} PluginObject.altName - An override that will be used as the method name
-   * for your object
-   * @property {function} PluginObject.func - A function returning a value relative to your theme.
-   */
+  constructor(opts) {
+    let seed = Date.now();
+    const options = Object.assign({}, opts);
+    if (Number.isInteger(options.seed)) {
+      seed = options.seed; // eslint-disable-line prefer-destructuring
+    } else if (typeof options.seed === 'string' || options.seed instanceof String) {
+      seed = Number(options.seed.split().map(char => char.charCodeAt(0)).join(''));
+    }
 
-  /**
-   * @typedef {Object} OptionsObject
-   * @property {number} OptionsObject.seed - The x coordinate.
-   * @property {number} OptionsObject.verbose - The x coordinate.
-   * @property {PluginObject[]} OptionsObject.plugins - The y coordinate.
-   */
+    Object.assign(this, {
+      _constant: 2147483647,
+      _diff: 0.4999,
+      _multiplier: 16807,
+      _seed: seed,
+    });
 
-  /**
-   * Create a RandomValue generator. Use the OptionsObject
-   * to override default behavior.
-   * @param {OptionsObject} [options] - An options object to set the seed and
-   */
-  constructor(options) {
-    const defaults = {
-      seed: Date.now(),
-      verbose: false,
-      plugins: [],
-    };
-    this._options = Object.assign(defaults, options);
-    // TODO handle strings in seed value
-    this._state = Math.abs(this._options.seed % 2147483646) + 1;
-    if (this._state <= 0) this._state += 2147483646;
+    this.seed = this._seed;
+    this.state = this._seed;
+  }
+
+  gen() {
+    this.state = (this.state * this._multiplier) % this._constant;
+    return this.state;
   }
 
   /**
-   * Get the seed that was used in the options object
-   * @return {String} Return the seed that was used in the options object or the integer
-   * which was generated if a seed was not given.
+   * Run a function multiple times and return the result from each run in an array.
+   * @param {function} func - A function to run many times.
+   * @param {any[]} args - An array of args to pass to the function.
+   * @param {number} amount - How many times to run the function.
+   * @return {any[]} Return an array of values returned from the method.
+   *
+   * @example
+   * import { RandomValue} from 'make-believe';
+   * const rv = RandomValue({ seed: 123 });
+   * const rand = rv.times(rv.rand, [], 2);
+   * console.log(rand) // [ 0.0009782956922224683, 0.44222351763604534 ]
    */
-  get seed() {
-    return this._options.seed;
+  times(amount, fn) {
+    let n = amount;
+    if (typeof n === 'undefined') {
+      n = 1;
+    }
+    let i = n;
+    const arr = [];
+    const params = Array
+      .prototype
+      .slice
+      .call(arguments, 2); // eslint-disable-line prefer-rest-params
+
+    for (i = Math.max(0, i) - 1; i >= 0; i -= 1) {
+      arr.push(fn.apply(this, params));
+    }
+
+    return arr;
   }
 
-  /**
-   * Get the seed that was used in the options object
-   * @return {RandomValue} Return the seed that was used in the options object or the integer
-   * which was generated if a seed was not given.
-   */
-  setSeed(seed) {
-    this._options.seed = seed;
-    return this;
-  }
-
-  /**
-   * Get the current state that will be used next random() call
-   * @return {number} Return the current state of the random generator.
-   */
-  get state() {
-    return this._state;
-  }
-
-  /**
-   * Get the current state that will be used next random() call
-   * @return {OptionsObject} Return the current state of the random generator.
-   */
-  get options() {
-    return this._options;
-  }
-
-  next() {
-    this._state = (this._state * 16807) % 2147483647;
-    return this._state;
-  }
-
-  /**
-   * Get the next random float in the series.
-   * @return {number} Return the current state of the random generator.
-   */
-  random() {
-    // TODO is this ok without using Math.abs approach from constructor?
-    return (this.next() - 1) / 2147483646;
+  _double() {
+    return (this.gen() / this._constant);
   }
 
   /**
    * Get a random integer within a range.
-   * @param {number} min - The smallest integer you might generate.
    * @param {number} max - The largest integer you might generate.
+   * If null or undefined, Number.MAX_SAFE_INTEGER will be used instead.
+   * @param {number} min - The smallest integer you might generate.
+   * If null or undefined, Number.MAX_SAFE_INTEGER will be used instead.
    * @return {number} Return a random integer value.
+   *
+   * @example
+   * import { RandomValue} from 'make-believe';
+   * const rv = new RandomValue();
+   * const rand = rv.randomInteger(3,-3);
+   * console.log(rand) // one of [-3,-2,-1,0,1,2,3]
    */
-  randomInteger(options) {
-    const one = this.random() * (options.max - options.min + 1);
-    return Math.floor(one + options.min);
+  random(opts) {
+    const options = Object.assign({}, opts);
+    const min = Object.prototype.hasOwnProperty.call(options, 'min') ? options.min : 0;
+    const max = Object.prototype.hasOwnProperty.call(options, 'max') ? options.max : 1;
+    return min + ((max - min) * this._double());
   }
 
-  /**
-   * Run a RandomValue method multiple times and return the result from each run in an array.
-   * @param {function} func - An array of values to pick from.
-   * @param {number} amount - How many values to pick from the array.
-   * @return {any[]} Return an array of values returned from the method.
-   */
-  times() {
-    return this; // TODO
+  randomInteger(opts) {
+    const options = Object.assign({}, opts);
+    const min = Object.prototype.hasOwnProperty.call(options, 'min') ? options.min : Number.MIN_SAFE_INTEGER;
+    const max = Object.prototype.hasOwnProperty.call(options, 'max') ? options.max : Number.MAX_SAFE_INTEGER;
+    const dbl = this._double();
+    return Math.round(min + ((max - min) * dbl));
   }
 
   /**
@@ -113,9 +101,16 @@ class RandomValue {
    * @param {any[]} pickArray - An array of values to pick from.
    * @param {number} amount - How many values to pick from the array.
    * @return {any|any[]} Return a value or an array of values from the pickArray.
+   *
+   * @example
+   * import { RandomValue} from 'make-believe';
+   * const rv = RandomValue({ seed: 123 });
+   *
+   * const rand1 = rv.pick([1,2,3,4,5,6], 3) ;
+   * console.log(rand1) // [ 1, 2, 6 ]
    */
-  pick() {
-    return this;
+  pick(pickArray, amount) {
+    return this.times(() => pickArray[Math.floor(this.random() * pickArray.length)], amount, []);
   }
 
   /**
@@ -130,31 +125,34 @@ class RandomValue {
   }
 
   /**
-   * Run a RandomValue method multiple times and return a series of values from .
-   * @param {function} method - An array of values to pick from.
-   * @param {number} amount - How many values to pick from the array.
-   * @return {any[]} Return an array of values returned from the method.
-   */
-  pickSeries() {
-    return this; // TODO
-  }
-
-  /**
-   * Pick one or more values from an array. Returned values will be picked weighted
-   * relative to values given in the weightArray.
+   * Pick one or more values from an array. Returned values may include duplicates.
    * @param {any[]} pickArray - An array of values to pick from.
-   * @param {number[]} weightArray - An array of values representing the weighting
-   * values corresponding to the pickArray.
    * @param {number} amount - How many values to pick from the array.
    * @return {any|any[]} Return a value or an array of values from the pickArray.
+   *
+   * @example
+   * import { RandomValue} from 'make-believe';
+   * const rv = new RandomValue();
+   *
+   * const rand1 = rv.pickSeries([1,2,3,4,5,6], 3) ;
+   * console.log(rand1) // [ 1, 2, 3 ]
+   *
+   * const rand2 = rv.pickSeries([1,2,3,4,5,6], 9) ;
+   * console.log(rand) // [ 1, 2, 3, 4, 5, 6, 1, 2, 3 ]
    */
-  pickWeighted() {
-    return this; // TODO
+  pickSeries(pickArray, amount) {
+    const totalArrays = Math.floor(amount / pickArray.length);
+    const partialArrayLength = amount % pickArray.length;
+    const result = [...new Array(totalArrays)]
+      .map(() => pickArray)
+      .concat(this.pick(pickArray, partialArrayLength));
+    return [].concat.apply([], result); // eslint-disable-line prefer-spread
   }
 
   /**
    * Shuffles array in place.
-   * @param {Array} a items An array containing the items.
+   * @param {any[]} arr - items An array containing the items.
+   * @return {any[]} Returns array after it has been shuffled.
    */
   shuffle(arr) {
     let j; let x; let i;
@@ -168,12 +166,28 @@ class RandomValue {
     return arr;
   }
 
-  toJSON() {
-    return {
-      options: this._options,
-      state: this._state,
-    };
+  addPlugins(plugin) {
+    this[plugin.name] = plugin.func;
   }
 }
+
+/**
+ * A plugin object that can be added to RandomValue.
+ * @typedef {Object} RandomValue~PluginObject
+ * @property {String} RandomValue~PluginObject.name - The name of your function.
+ * This will be used as the method name unless an altName is also provided.
+ * @property {String} RandomValue~PluginObject.altName - An override that will be used
+ * as the method name for your object
+ * @property {function} RandomValue~PluginObject.func - A function returning a value
+ * relative to your theme.
+ */
+
+/**
+ * An options object when instantiating RandomValue.
+ * @typedef {Object} RandomValue~OptionsObject
+ * @property {number} RandomValue~OptionsObject.seed - The x coordinate.
+ * @property {number} RandomValue~OptionsObject.verbose - The x coordinate.
+ * @property {PluginObject[]} RandomValue~OptionsObject.plugins - The y coordinate.
+ */
 
 module.exports = RandomValue;
