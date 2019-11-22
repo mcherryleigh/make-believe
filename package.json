@@ -43,7 +43,7 @@
     "coveralls": "^3.0.2",
     "docma": "^3.2.2",
     "documentation": "^9.1.1",
-    "eslint": "^5.12.0",
+    "eslint": "^6.7.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
     "husky": "^1.3.1",
